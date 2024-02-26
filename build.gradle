@@ -78,9 +78,9 @@ minecraft {
 	runs {
 		client {
 			workingDirectory project.file('run')
-			arg "-mixin.config=chaosawakens.mixins.json"
+			arg "-mixin.config=chaosawakens.mixins.json"        
 			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        		property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 			property 'forge.logging.markers', 'SCAN'
 			property 'forge.logging.console.level', 'debug'
 			mods {
@@ -163,7 +163,10 @@ dependencies {
 	implementation fg.deobf("curse.maven:the-one-probe-245211:${project.top}")
 	implementation fg.deobf("curse.maven:jade-324717:${project.jade}")
 
-	implementation fg.deobf("curse.maven:curios-309927:${project.curios}")
+    // Compile against only the API artifact
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
+    // Use the full Curios API jar at runtime
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -201,13 +204,17 @@ repositories {
 		url = "https://www.cursemaven.com"
 	}
 	maven {
-        name 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
-        }
+        	name 'GeckoLib'
+        	url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        	content {
+            		includeGroupByRegex("software\\.bernie.*")
+			includeGroup("com.eliotlash.mclib")
+        	}
 	}
+	maven {
+    		name = "Illusive Soulworks maven"
+    		url = "https://maven.theillusivec4.top/"
+  	}
 }
 
 jar {
